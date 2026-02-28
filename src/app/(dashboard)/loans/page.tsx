@@ -40,11 +40,11 @@ export default function LoansPage() {
         }
       />
 
-      <main className="flex-1 p-6">
+      <main className="flex-1 p-4 md:p-6 overflow-x-auto">
         {/* Filters */}
         <div className="bg-white rounded-2xl shadow-sm border border-slate-100 mb-6 p-4">
-          <div className="flex flex-wrap gap-3 items-center">
-            <div className="flex-1 min-w-48">
+          <div className="flex flex-col sm:flex-row gap-3 items-start sm:items-center">
+            <div className="flex-1 w-full sm:min-w-48">
               <input
                 type="text"
                 placeholder="Search by member name or loan ID..."
@@ -75,47 +75,47 @@ export default function LoansPage() {
         </div>
 
         {/* Table */}
-        <div className="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
+        <div className="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden min-w-0">
           <div className="overflow-x-auto">
-            <table className="w-full text-sm">
+            <table className="w-full text-xs sm:text-sm">
               <thead>
                 <tr className="bg-slate-50 border-b border-slate-100">
-                  <th className="text-left px-6 py-4 text-xs font-semibold text-slate-500 uppercase tracking-wider">Loan ID</th>
-                  <th className="text-left px-6 py-4 text-xs font-semibold text-slate-500 uppercase tracking-wider">Member</th>
-                  <th className="text-left px-6 py-4 text-xs font-semibold text-slate-500 uppercase tracking-wider">Amount</th>
-                  <th className="text-left px-6 py-4 text-xs font-semibold text-slate-500 uppercase tracking-wider">Balance</th>
-                  <th className="text-left px-6 py-4 text-xs font-semibold text-slate-500 uppercase tracking-wider">Term / Rate</th>
-                  <th className="text-left px-6 py-4 text-xs font-semibold text-slate-500 uppercase tracking-wider">Next Due</th>
-                  <th className="text-left px-6 py-4 text-xs font-semibold text-slate-500 uppercase tracking-wider">Status</th>
-                  <th className="text-left px-6 py-4 text-xs font-semibold text-slate-500 uppercase tracking-wider">Actions</th>
+                  <th className="text-left px-3 sm:px-6 py-3 sm:py-4 text-xs font-semibold text-slate-500 uppercase tracking-wider whitespace-nowrap">Loan ID</th>
+                  <th className="text-left px-3 sm:px-6 py-3 sm:py-4 text-xs font-semibold text-slate-500 uppercase tracking-wider whitespace-nowrap">Member</th>
+                  <th className="text-left px-3 sm:px-6 py-3 sm:py-4 text-xs font-semibold text-slate-500 uppercase tracking-wider whitespace-nowrap">Amount</th>
+                  <th className="text-left px-3 sm:px-6 py-3 sm:py-4 text-xs font-semibold text-slate-500 uppercase tracking-wider whitespace-nowrap hidden md:table-cell">Balance</th>
+                  <th className="text-left px-3 sm:px-6 py-3 sm:py-4 text-xs font-semibold text-slate-500 uppercase tracking-wider whitespace-nowrap hidden lg:table-cell">Term / Rate</th>
+                  <th className="text-left px-3 sm:px-6 py-3 sm:py-4 text-xs font-semibold text-slate-500 uppercase tracking-wider whitespace-nowrap hidden xl:table-cell">Next Due</th>
+                  <th className="text-left px-3 sm:px-6 py-3 sm:py-4 text-xs font-semibold text-slate-500 uppercase tracking-wider whitespace-nowrap">Status</th>
+                  <th className="text-left px-3 sm:px-6 py-3 sm:py-4 text-xs font-semibold text-slate-500 uppercase tracking-wider whitespace-nowrap hidden sm:table-cell">Actions</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-50">
                 {loans.map((loan) => (
                   <tr key={loan.id} className="hover:bg-slate-50 transition-colors">
-                    <td className="px-6 py-4 font-mono text-xs text-slate-500">{loan.id}</td>
-                    <td className="px-6 py-4">
+                    <td className="px-3 sm:px-6 py-3 sm:py-4 font-mono text-xs text-slate-500 whitespace-nowrap">{loan.id}</td>
+                    <td className="px-3 sm:px-6 py-3 sm:py-4">
                       <div>
-                        <p className="font-medium text-slate-900">{loan.member}</p>
-                        <p className="text-xs text-slate-400">{loan.memberId}</p>
+                        <p className="font-medium text-slate-900 text-sm">{loan.member}</p>
+                        <p className="text-xs text-slate-400 sm:hidden">{loan.memberId}</p>
                       </div>
                     </td>
-                    <td className="px-6 py-4 font-semibold text-slate-900">
+                    <td className="px-3 sm:px-6 py-3 sm:py-4 font-semibold text-slate-900 text-sm whitespace-nowrap">
                       ₱{loan.amount.toLocaleString()}
                     </td>
-                    <td className="px-6 py-4 text-slate-700">
+                    <td className="px-3 sm:px-6 py-3 sm:py-4 text-slate-700 text-sm hidden md:table-cell whitespace-nowrap">
                       {loan.balance > 0 ? `₱${loan.balance.toLocaleString()}` : "—"}
                     </td>
-                    <td className="px-6 py-4 text-slate-600">
+                    <td className="px-3 sm:px-6 py-3 sm:py-4 text-slate-600 text-sm hidden lg:table-cell whitespace-nowrap">
                       {loan.term} @ {loan.rate}
                     </td>
-                    <td className="px-6 py-4 text-slate-600">{loan.nextDue}</td>
-                    <td className="px-6 py-4">
+                    <td className="px-3 sm:px-6 py-3 sm:py-4 text-slate-600 text-sm hidden xl:table-cell whitespace-nowrap">{loan.nextDue}</td>
+                    <td className="px-3 sm:px-6 py-3 sm:py-4">
                       <span className={`px-2.5 py-1 rounded-full text-xs font-semibold ${statusColors[loan.status]}`}>
                         {loan.status}
                       </span>
                     </td>
-                    <td className="px-6 py-4">
+                    <td className="px-3 sm:px-6 py-3 sm:py-4 hidden sm:table-cell">
                       <div className="flex items-center gap-2">
                         <Link
                           href={`/loans/${loan.id}`}
@@ -129,8 +129,8 @@ export default function LoansPage() {
                             <button className="text-emerald-600 hover:text-emerald-700 text-xs font-medium">
                               Approve
                             </button>
-                            <span className="text-slate-300">|</span>
-                            <button className="text-red-500 hover:text-red-600 text-xs font-medium">
+                            <span className="text-slate-300 hidden sm:inline">|</span>
+                            <button className="text-red-500 hover:text-red-600 text-xs font-medium hidden sm:inline">
                               Reject
                             </button>
                           </>
@@ -144,16 +144,16 @@ export default function LoansPage() {
           </div>
 
           {/* Pagination */}
-          <div className="px-6 py-4 border-t border-slate-100 flex items-center justify-between">
-            <p className="text-sm text-slate-500">Showing 8 of 156 loans</p>
-            <div className="flex items-center gap-2">
+          <div className="px-4 sm:px-6 py-4 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-3">
+            <p className="text-xs sm:text-sm text-slate-500 order-2 sm:order-1">Showing 8 of 156 loans</p>
+            <div className="flex items-center gap-1 sm:gap-2 order-1 sm:order-2">
               <button className="px-3 py-1.5 border border-slate-200 rounded-lg text-sm text-slate-600 hover:bg-slate-50 disabled:opacity-40" disabled>
                 Previous
               </button>
               <button className="px-3 py-1.5 bg-blue-600 text-white rounded-lg text-sm font-medium">1</button>
               <button className="px-3 py-1.5 border border-slate-200 rounded-lg text-sm text-slate-600 hover:bg-slate-50">2</button>
               <button className="px-3 py-1.5 border border-slate-200 rounded-lg text-sm text-slate-600 hover:bg-slate-50">3</button>
-              <button className="px-3 py-1.5 border border-slate-200 rounded-lg text-sm text-slate-600 hover:bg-slate-50">
+              <button className="px-2 sm:px-3 py-1.5 border border-slate-200 rounded-lg text-xs sm:text-sm text-slate-600 hover:bg-slate-50">
                 Next
               </button>
             </div>

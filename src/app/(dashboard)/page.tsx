@@ -32,7 +32,7 @@ export default function DashboardPage() {
         subtitle="Welcome back, Admin. Here's what's happening today."
       />
 
-      <main className="flex-1 p-6 space-y-6">
+      <main className="flex-1 p-4 md:p-6 space-y-4 md:space-y-6">
         {/* Stats Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
           <StatCard
@@ -86,7 +86,7 @@ export default function DashboardPage() {
         </div>
 
         {/* Quick Actions */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div className="grid grid-cols-2 gap-2 md:gap-4">
           {[
             { href: "/loans/apply", label: "New Loan Application", color: "bg-blue-600 hover:bg-blue-700", icon: "📋" },
             { href: "/members/new", label: "Register Member", color: "bg-emerald-600 hover:bg-emerald-700", icon: "👤" },
@@ -96,16 +96,16 @@ export default function DashboardPage() {
             <Link
               key={action.href}
               href={action.href}
-              className={`${action.color} text-white rounded-xl p-4 flex flex-col items-center gap-2 text-center transition-colors shadow-sm`}
+              className={`${action.color} text-white rounded-xl p-3 md:p-4 flex flex-col items-center gap-1 md:gap-2 text-center transition-colors shadow-sm`}
             >
-              <span className="text-2xl">{action.icon}</span>
-              <span className="text-sm font-medium leading-tight">{action.label}</span>
+              <span className="text-xl md:text-2xl">{action.icon}</span>
+              <span className="text-xs md:text-sm font-medium leading-tight">{action.label}</span>
             </Link>
           ))}
         </div>
 
         {/* Tables Row */}
-        <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-6">
           {/* Recent Loans */}
           <div className="bg-white rounded-2xl shadow-sm border border-slate-100">
             <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between">

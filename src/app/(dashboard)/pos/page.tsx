@@ -39,6 +39,7 @@ export default function POSPage() {
   const [paymentMethod, setPaymentMethod] = useState("Cash");
   const [amountTendered, setAmountTendered] = useState("");
   const [showReceipt, setShowReceipt] = useState(false);
+  const [cartOpen, setCartOpen] = useState(false);
   const [txnId] = useState(() => String(Date.now()).slice(-6));
   const [currentDate] = useState(() =>
     new Date().toLocaleDateString("en-PH", { weekday: "short", year: "numeric", month: "short", day: "numeric" })
@@ -58,6 +59,10 @@ export default function POSPage() {
       }
       return [...prev, { id: product.id, name: product.name, price: product.price, qty: 1, unit: product.unit }];
     });
+    // Auto-open cart on mobile when adding item
+    if (window.innerWidth < 1024) {
+      setCartOpen(true);
+    }
   };
 
   const updateQty = (id: number, qty: number) => {
@@ -76,6 +81,7 @@ export default function POSPage() {
   const handleCheckout = () => {
     if (cart.length === 0) return;
     setShowReceipt(true);
+    setCartOpen(false);
   };
 
   const handleNewTransaction = () => {
@@ -88,7 +94,7 @@ export default function POSPage() {
   return (
     <div className="flex flex-col flex-1 h-screen overflow-hidden">
       {/* POS Header */}
-      <div className="bg-[#0f172a] text-white px-6 py-3 flex items-center justify-between flex-shrink-0">
+      <div className="bg-[#0f172a] text-white px-4 md:px-6 py-3 flex items-center justify-between flex-shrink-0">
         <div className="flex items-center gap-3">
           <div className="w-8 h-8 rounded-lg bg-violet-500 flex items-center justify-center">
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -97,13 +103,27 @@ export default function POSPage() {
           </div>
           <div>
             <p className="font-bold text-sm">POS Terminal</p>
-            <p className="text-xs text-slate-400">Cashier: Clerk A</p>
+            <p className="text-xs text-slate-400 hidden sm:block">Cashier: Clerk A</p>
           </div>
         </div>
-        <div className="flex items-center gap-4 text-sm text-slate-300">
+        <div className="flex items-center gap-2 md:gap-4 text-xs md:text-sm text-slate-300">
           <span>TXN: TXN-{txnId}</span>
-          <span className="text-slate-500">|</span>
-          <span>{currentDate}</span>
+          <span className="text-slate-500 hidden sm:inline">|</span>
+          <span className="hidden md:inline">{currentDate}</span>
+          {/* Mobile Cart Toggle */}
+          <button 
+            onClick={() => setCartOpen(!cartOpen)}
+            className="lg:hidden p-2 bg-violet-600 rounded-lg relative"
+          >
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+            </svg>
+            {cart.length > 0 && (
+              <span className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 rounded-full text-xs flex items-center justify-center">
+                {cart.length}
+              </span>
+            )}
+          </button>
         </div>
       </div>
 
@@ -111,7 +131,7 @@ export default function POSPage() {
         {/* Products Panel */}
         <div className="flex-1 flex flex-col overflow-hidden bg-slate-50">
           {/* Search & Category */}
-          <div className="p-4 bg-white border-b border-slate-200 space-y-3 flex-shrink-0">
+          <div className="p-3 md:p-4 bg-white border-b border-slate-200 space-y-3 flex-shrink-0">
             <input
               type="text"
               placeholder="Search products..."
@@ -137,16 +157,16 @@ export default function POSPage() {
           </div>
 
           {/* Product Grid */}
-          <div className="flex-1 overflow-y-auto p-4 scrollbar-thin">
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
+          <div className="flex-1 overflow-y-auto p-3 md:p-4 scrollbar-thin">
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2 md:gap-3">
               {filteredProducts.map((product) => (
                 <button
                   key={product.id}
                   onClick={() => addToCart(product)}
-                  className="bg-white rounded-xl p-4 text-left shadow-sm border border-slate-100 hover:border-violet-300 hover:shadow-md transition-all group"
+                  className="bg-white rounded-xl p-3 md:p-4 text-left shadow-sm border border-slate-100 hover:border-violet-300 hover:shadow-md transition-all group"
                 >
-                  <div className="w-10 h-10 rounded-lg bg-violet-50 flex items-center justify-center mb-3 group-hover:bg-violet-100 transition-colors">
-                    <span className="text-lg">
+                  <div className="w-8 h-8 md:w-10 md:h-10 rounded-lg bg-violet-50 flex items-center justify-center mb-2 md:mb-3 group-hover:bg-violet-100 transition-colors">
+                    <span className="text-base md:text-lg">
                       {product.category === "Grains" ? "🌾" :
                        product.category === "Condiments" ? "🧂" :
                        product.category === "Canned Goods" ? "🥫" :
@@ -158,28 +178,42 @@ export default function POSPage() {
                        product.category === "Personal Care" ? "🪥" : "📦"}
                     </span>
                   </div>
-                  <p className="text-sm font-semibold text-slate-800 leading-tight mb-1">{product.name}</p>
-                  <p className="text-xs text-slate-400 mb-2">{product.stock} {product.unit}s in stock</p>
-                  <p className="text-base font-bold text-violet-600">₱{product.price.toFixed(2)}</p>
+                  <p className="text-xs md:text-sm font-semibold text-slate-800 leading-tight mb-1 truncate">{product.name}</p>
+                  <p className="text-xs text-slate-400 mb-1 md:mb-2 hidden sm:block">{product.stock} {product.unit}s in stock</p>
+                  <p className="text-sm md:text-base font-bold text-violet-600">₱{product.price.toFixed(2)}</p>
                 </button>
               ))}
             </div>
           </div>
         </div>
 
-        {/* Cart Panel */}
-        <div className="w-80 bg-white border-l border-slate-200 flex flex-col flex-shrink-0">
+        {/* Cart Panel - Desktop: always visible, Mobile: slide-in overlay */}
+        <div className={`
+          fixed lg:static inset-y-0 right-0 z-40 w-80 bg-white border-l border-slate-200 flex flex-col flex-shrink-0
+          transform transition-transform duration-300 ease-in-out lg:transform-none
+          ${cartOpen ? 'translate-x-0' : 'translate-x-full lg:translate-x-0'}
+        `}>
           {/* Cart Header */}
           <div className="px-4 py-3 border-b border-slate-100 flex items-center justify-between">
             <h2 className="font-semibold text-slate-900">Current Order</h2>
-            {cart.length > 0 && (
-              <button
-                onClick={() => setCart([])}
-                className="text-xs text-red-500 hover:text-red-600 font-medium"
+            <div className="flex items-center gap-2">
+              {cart.length > 0 && (
+                <button
+                  onClick={() => setCart([])}
+                  className="text-xs text-red-500 hover:text-red-600 font-medium"
+                >
+                  Clear
+                </button>
+              )}
+              <button 
+                onClick={() => setCartOpen(false)}
+                className="lg:hidden p-1 hover:bg-slate-100 rounded"
               >
-                Clear All
+                <svg className="w-5 h-5 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
               </button>
-            )}
+            </div>
           </div>
 
           {/* Cart Items */}
@@ -192,7 +226,7 @@ export default function POSPage() {
                   </svg>
                 </div>
                 <p className="text-sm text-slate-500">No items in cart</p>
-                <p className="text-xs text-slate-400 mt-1">Click products to add them</p>
+                <p className="text-xs text-slate-400 mt-1">Click products to add</p>
               </div>
             ) : (
               <div className="divide-y divide-slate-50">
@@ -303,6 +337,14 @@ export default function POSPage() {
           </div>
         </div>
       </div>
+
+      {/* Cart Overlay Background (Mobile) */}
+      {cartOpen && (
+        <div 
+          className="fixed inset-0 bg-black/50 z-30 lg:hidden"
+          onClick={() => setCartOpen(false)}
+        />
+      )}
 
       {/* Receipt Modal */}
       {showReceipt && (
