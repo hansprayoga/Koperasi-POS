@@ -13,8 +13,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Next.js Template",
-  description: "A minimal Next.js starter template",
+  title: "CoopSystem — Cooperative Management",
+  description: "Cooperative Loan System and Point of Sale for cooperative goods",
 };
 
 export default function RootLayout({
