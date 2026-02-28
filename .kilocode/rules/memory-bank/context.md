@@ -86,3 +86,4 @@ export async function GET() {
 |------|---------|
 | Initial | Template created with base setup |
 | Feb 28, 2026 | Built full Cooperative Loan System + POS Terminal website |
+| Feb 28, 2026 | Added public customer ordering page (/order) + admin Customer Orders panel (/pos/orders) with real-time order management via API routes |
