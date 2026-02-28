@@ -110,9 +110,9 @@ export default function Sidebar({ onNavigate }: SidebarProps) {
   const pathname = usePathname();
 
   return (
-    <aside className="w-64 min-h-screen bg-[#0f172a] text-white flex flex-col shadow-xl">
+    <aside className="w-64 h-screen bg-[#0f172a] text-white flex flex-col shadow-xl overflow-hidden">
       {/* Logo */}
-      <div className="px-6 py-5 border-b border-white/10">
+      <div className="flex-shrink-0 px-6 py-5 border-b border-white/10">
         <div className="flex items-center gap-3">
           <div className="w-9 h-9 rounded-xl bg-blue-500 flex items-center justify-center shadow-lg">
             <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -126,8 +126,8 @@ export default function Sidebar({ onNavigate }: SidebarProps) {
         </div>
       </div>
 
-      {/* Navigation */}
-      <nav className="flex-1 px-3 py-4 space-y-6 overflow-y-auto scrollbar-thin">
+      {/* Navigation - Scrollable */}
+      <nav className="flex-1 px-3 py-4 space-y-6 overflow-y-auto scrollbar-thin scrollbar-thumb-slate-600 scrollbar-track-transparent">
         {navSections.map((section) => (
           <div key={section.label}>
             <p className="px-3 mb-2 text-xs font-semibold text-slate-500 uppercase tracking-wider">
